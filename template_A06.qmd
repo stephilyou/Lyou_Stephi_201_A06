@@ -213,7 +213,8 @@ max_temps <- read_tsv("state_max_temps.tsv") |>
 Calculate the average temperature for each month across the whole data frame (using the data for all three states together).
 
 ```{r}
-
+column_spec <- spec(max_temps)
+print(column_spec)
 ```
 
 
@@ -262,6 +263,14 @@ Example: The number 312 would return 6 (3 + 1 + 2)
 Run your function with 935068.
 
 ```{r}
+sum_of_digits <- function(n) {
+  if (n < 10) {
+    return(n)
+  } else {
+    return(n %% 10 + sum_of_digits(n %/% 10))
+  }
+}
 
+sum_of_digits(935068)
 ```
 
