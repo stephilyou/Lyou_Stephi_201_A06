@@ -142,8 +142,8 @@ points_per_game <- list()
 
 for (i in names(player_info)) {
   player <- player_info[[i]]
-  ppg <- player$points / player$games_played
-  points_per_game[[i]] <- ppg
+  points <- player$points / player$games_played
+  points_per_game[[i]] <- points
 }
 ```
 
@@ -155,8 +155,8 @@ Use the list created in Part c and an appropriate apply function to round each v
 Store the output as a vector and print the results.
 
 ```{r}
-ppg_rounded <- sapply(points_per_game, round, 2)
-print(ppg_rounded)
+points_per_game_rounded <- sapply(points_per_game, round, 2)
+print(points_per_game_rounded)
 ```
 
 
@@ -213,8 +213,8 @@ max_temps <- read_tsv("state_max_temps.tsv") |>
 Calculate the average temperature for each month across the whole data frame (using the data for all three states together).
 
 ```{r}
-column_spec <- spec(max_temps)
-print(column_spec)
+avg_temp <- lapply(max_temps[3:14], mean)
+print(avg_temp)
 ```
 
 
@@ -229,7 +229,10 @@ Create three new data frames by slicing the data by state.
 No need to print any output here.
 
 ```{r}
-
+colorado <- subset(x = max_temps, subset = state == "CO")
+print(colorado)
+ohio <- subset(x = max_temps, subset = state == "OH")
+virginia <- subset(x = max_temps, subset = state == "VA")
 ```
 
 
@@ -250,7 +253,17 @@ Example (this is NOT the answer just an example of what goes in the {}):
 Note: This code should still run successfully even if the numbers were to change.
 
 ```{r}
+median_temp_annual <- function(row) {
+  median(row[3:14], na.rm = TRUE)
+}
 
+median_annual_temps <- apply(colorado[, 3:14], 1, median_temp_annual)
+median_temp_and_year <- cbind(colorado$year, median_annual_temps)
+colnames(median_temp_and_year) <- c("year", "temp")
+max_temp <- which.max(median_temp_and_year[,2])
+min_temp <- which.min(median_temp_and_year[,2])
+
+print(paste0("The maximum median annual temperature of ", median_temp_and_year[max_temp,2], " occurred in ", median_temp_and_year[max_temp,1], " and the minimum median annual temperature of ", median_temp_and_year[min_temp,2], " occurred in ", median_temp_and_year[min_temp,1]))
 ```
 
 
